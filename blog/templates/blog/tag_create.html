@@ -1,0 +1,27 @@
+{% extends 'blog/base_blog.html' %}
+
+{% block title %}
+    Tag Create - {{block.super}}
+{% endblock title %}
+
+{% block content %}
+    <form action="{% url 'tag_create_url' %}" method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                {% if field.errors %}
+                    <div class="alert alert-danger">
+                        {{field.errors}}
+                    </div>
+                {% endif %}
+                {{ field.label }}
+                {{ field }}
+                <!-- <label for="exampleInputPassword1">Password</label> -->
+                <!-- <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"> -->
+              </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Create Tag</button>
+
+    </form>
+{% endblock content %}
