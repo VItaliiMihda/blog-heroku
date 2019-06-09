@@ -10,8 +10,8 @@ class Profile(models.Model):
     def __str__(self):
         return f'Profile user {self.user.username}'
 
-    def save(self):
-        super().save()
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
         image = Image.open(self.img.path)
         if image.height > 256 or image.width > 256:
             resize = (256, 256)
