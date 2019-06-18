@@ -35,3 +35,4 @@ venv
 /venv
 *.sqlite3
 *.bak
+XDG_CACHE_HOME/
