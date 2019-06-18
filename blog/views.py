@@ -7,7 +7,24 @@ from .forms import TagForm, PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
+from rest_framework import generics, routers
+from .serializers import PostDetailSerializer, PostListSerializer
+from .permissions import isOwnerOrReadOnly
+from rest_framework.permissions import isAuthenticated
 
+
+class PostCreateView(generics.CreateAPIView):
+    serializer_class = PostDetailSerializer
+
+class PostListView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostListSerializer
+
+class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostDetailSerializer
+    lookup_field = 'slug'
+    permissions_classes = (isOwnerOrReadOnly, )
 
 def posts_list(request):
     search_query = request.GET.get('search', '')
