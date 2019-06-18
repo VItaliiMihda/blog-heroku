@@ -10,7 +10,7 @@ from django.db.models import Q
 from rest_framework import generics, routers
 from .serializers import PostDetailSerializer, PostListSerializer
 from .permissions import isOwnerOrReadOnly
-from rest_framework.permissions import isAuthenticated
+from rest_framework.permissions import IsAuthenticated
 
 
 class PostCreateView(generics.CreateAPIView):
