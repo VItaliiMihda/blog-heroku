@@ -14,17 +14,21 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class PostCreateView(generics.CreateAPIView):
+    permission_classes = (IsAuthenticated,)
     serializer_class = PostDetailSerializer
+
 
 class PostListView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostListSerializer
 
+
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostDetailSerializer
     lookup_field = 'slug'
-    permissions_classes = (isOwnerOrReadOnly, )
+    permissions_classes = (isOwnerOrReadOnly,)
+
 
 def posts_list(request):
     search_query = request.GET.get('search', '')

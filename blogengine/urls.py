@@ -9,11 +9,12 @@ urlpatterns = [
     path('', redirect_block),
     path('admin/', admin.site.urls),
     path('api/v1/blog/', include('blog.urls')),
-    path('api/v1/auth/', include('rest_framework.urls')),
+    # path('api/v1/auth/', include('rest_framework.urls')),
     path('blog/', include('blog.urls')),
     path('registration/', usersView.signup, name="registration"),
     path('logout/', usersView.logout_view, name="logout"),
     path('login/', usersView.login_view, name="login"),
+    path('login-rest/', usersView.login_rest, name="login-rest"),
     path('profile/', usersView.profile, name="profile"),
 ]
 
