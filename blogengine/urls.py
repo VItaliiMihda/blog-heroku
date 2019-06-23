@@ -12,6 +12,7 @@ urlpatterns = [
     # path('api/v1/auth/', include('rest_framework.urls')),
     path('blog/', include('blog.urls')),
     path('registration/', usersView.signup, name="registration"),
+    path('api/registration/', usersView.UserCreateAPIView.as_view(), name="api-registration"),
     path('logout/', usersView.logout_view, name="logout"),
     path('login/', usersView.login_view, name="login"),
     path('login-rest/', usersView.login_rest, name="login-rest"),

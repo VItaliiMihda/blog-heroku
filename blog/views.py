@@ -29,6 +29,13 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
     permissions_classes = (isOwnerOrReadOnly,)
 
+    # def get(self, request, slug):
+    #     print(self)
+    #     print(slug)
+    #     print(request)
+    #     obj = Post.objects.get(slug__iexact=slug)
+    #     print(obj)
+
 
 def posts_list(request):
     search_query = request.GET.get('search', '')
@@ -105,19 +112,6 @@ class TagUpdate(LoginRequiredMixin, ObjectUpdateMixin, View):
     model_form = TagForm
     template = 'blog/tag_update_form.html'
     raise_exception = True
-    # def get(self, request, slug):
-    #     tag = Tag.objects.get(slug__iexact=slug)
-    #     bound_form = TagForm(instance=tag)
-    #     return render(request, 'blog/tag_update_form.html', context={'form': bound_form, 'tag': tag})
-    #
-    # def post(self, request, slug):
-    #     tag = Tag.objects.get(slug__iexact=slug)
-    #     bound_form = TagForm(request.POST, instance=tag)
-    #
-    #     if bound_form.is_valid():
-    #         new_tag = bound_form.save()
-    #         return redirect(new_tag)
-    #     return render(request, 'blog/tag_update_form.html', context={'form': bound_form, 'tag': tag})
 
 
 class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
@@ -125,28 +119,9 @@ class TagCreate(LoginRequiredMixin, ObjectCreateMixin, View):
     template = 'blog/tag_create.html'
     raise_exception = True
 
-    # def get(self, request):
-    #     form = TagForm()
-    #     return render(request, 'blog/tag_create.html', context={'form': form})
-
-    # def post(self, request):
-    #     bound_form = TagForm(request.POST)
-    #     if bound_form.is_valid():
-    #         new_tag = bound_form.save()
-    #         return redirect(new_tag)
-    #     return render(request, 'blog/tag_create.html', context={'form': bound_form})
-
 
 class TagDelete(LoginRequiredMixin, ObjectDeleteMixin, View):
     model = Tag
     template = 'blog/tag_delete_form.html'
     redirect_url = 'tags_list_url'
     raise_exception = True
-    # def get(self, request, slug):
-    #     tag = Tag.objects.get(slug__iexact=slug)
-    #     return render(request, 'blog/tag_delete_form.html', context={'tag': tag})
-    #
-    # def post(self, request, slug):
-    #     tag = Tag.objects.get(slug__iexact=slug)
-    #     tag.delete()
-    #     return redirect(reverse('tags_list_url'))

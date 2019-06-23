@@ -5,7 +5,7 @@ from .models import *
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'date_pub')
-    exclude = ('slug',)
+    # exclude = ('slug',)
 
 
 admin.site.register(Post, PostAdmin)
