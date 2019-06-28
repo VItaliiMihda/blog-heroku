@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.db.models import Q
 from rest_framework import generics, routers
-from .serializers import PostDetailSerializer, PostListSerializer
+from .serializers import PostDetailSerializer, PostListSerializer, TagListSerializer
 from .permissions import isOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated
 
@@ -29,12 +29,10 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'slug'
     permissions_classes = (isOwnerOrReadOnly,)
 
-    # def get(self, request, slug):
-    #     print(self)
-    #     print(slug)
-    #     print(request)
-    #     obj = Post.objects.get(slug__iexact=slug)
-    #     print(obj)
+
+class TagListView(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagListSerializer
 
 
 def posts_list(request):
