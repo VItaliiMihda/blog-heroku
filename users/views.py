@@ -21,12 +21,28 @@ from rest_framework.authtoken.views import ObtainAuthToken
 
 class CustomObtainAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        print(dir(request))
-        print(self.request.POST)
-        response = super(CustomObtainAuthToken, self).post(request, *args, **kwargs)
-        token = Token.objects.get(key=response.data['token'])
-        return Response({'token': token.key, 'id': token.user_id})
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        print(serializer)                                           
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
 
+def get_auth_user(request):
+    if request.user.is_authenticated:
+        # user = authenticate(username=username, password=password)
+        token, _ = Token.objects.get_or_create(user=request.user)
+        return Response({
+            'token': token.key,
+            'username': request.user.username,
+            'avatar': request.user.profile.img.url
+
+            },
+        status=HTTP_200_OK)
 
 @csrf_exempt
 @api_view(["POST"])

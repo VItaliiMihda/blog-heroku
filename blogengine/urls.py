@@ -16,7 +16,7 @@ urlpatterns = [
     path('logout/', usersView.logout_view, name="logout"),
     path('login/', usersView.login_view, name="login"),
     path('auth/login/', usersView.login_rest, name="auth-login"),
-    path('authenticate/', usersView.CustomObtainAuthToken.as_view()),
+    path('authenticate/', usersView.get_auth_user),
     path('profile/', usersView.profile, name="profile"),
 ]
 
