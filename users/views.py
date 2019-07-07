@@ -16,22 +16,11 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from .serializers import UserSerializer
 from django.contrib.auth.models import User
-from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.views import APIView
 
 
-class CustomObtainAuthToken(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        print(serializer)                                           
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.email
-        })
-
+@csrf_exempt
+@api_view(["POST"])
 def get_auth_user(request):
     if request.user.is_authenticated:
         # user = authenticate(username=username, password=password)
@@ -41,8 +30,9 @@ def get_auth_user(request):
             'username': request.user.username,
             'avatar': request.user.profile.img.url
 
-            },
-        status=HTTP_200_OK)
+        },
+            status=HTTP_200_OK)
+
 
 @csrf_exempt
 @api_view(["POST"])
@@ -58,14 +48,24 @@ def login_rest(request):
         return Response({'error': 'Invalid Credentials'},
                         status=HTTP_404_NOT_FOUND)
     token, _ = Token.objects.get_or_create(user=user)
-    
+
     return Response({
         'token': token.key,
         'username': user.username,
         'avatar': user.profile.img.url
 
-        },
+    },
         status=HTTP_200_OK)
+
+
+@csrf_exempt
+@api_view(["POST"])
+def logout_rest(request):
+    print(request)
+    print(request.user.is_authenticated)
+    # simply delete the token to force a login
+    request.user.auth_token.delete()
+    return Response(status=HTTP_200_OK)
 
 
 # @api_view(["POST"])
@@ -76,13 +76,13 @@ class UserCreateAPIView(generics.CreateAPIView):
 
 
 # def create_auth(request):
-    # print(request)
-    # serialized = UserCreate(data=request.data)
-    # if serialized.is_valid():
-    #     User.objects.create_user(**serialized.init_data)
-    #     return Response(serialized.data, status=HTTP_201_CREATED)
-    # else:
-    #     return Response(serialized._errors, status=HTTP_400_BAD_REQUEST)
+# print(request)
+# serialized = UserCreate(data=request.data)
+# if serialized.is_valid():
+#     User.objects.create_user(**serialized.init_data)
+#     return Response(serialized.data, status=HTTP_201_CREATED)
+# else:
+#     return Response(serialized._errors, status=HTTP_400_BAD_REQUEST)
 
 
 def signup(request):

@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from rest_framework.response import Response
 from .models import Profile
 
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -22,7 +23,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = "__all__"
-
 
 # class MyUserSerializer(serializers.ModelSerializer):
 #     class Meta:
