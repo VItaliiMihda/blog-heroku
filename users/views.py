@@ -61,11 +61,12 @@ def login_rest(request):
 @csrf_exempt
 @api_view(["POST"])
 def logout_rest(request):
-    print(request)
-    print(request.user.is_authenticated)
     # simply delete the token to force a login
-    request.user.auth_token.delete()
-    return Response(status=HTTP_200_OK)
+    if request.user.is_authenticated:
+        request.user.auth_token.delete()
+        return Response(status=HTTP_200_OK)
+    else:
+        return Response(status=HTTP_400_BAD_REQUEST)
 
 
 # @api_view(["POST"])
