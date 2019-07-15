@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from .serializers import UserSerializer
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
+from django.core.exceptions import ObjectDoesNotExist
 
 
 @csrf_exempt
@@ -70,6 +71,7 @@ def logout_rest(request):
 
 
 # @api_view(["POST"])
+# @csrf_exempt
 class UserCreateAPIView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer

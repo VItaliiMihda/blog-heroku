@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
+from rest_framework.views import exception_handler
 
 
 class ObjectDetailMixin:
@@ -66,3 +67,16 @@ class ObjectDeleteMixin:
         obj = self.model.objects.get(slug__iexact=slug)
         obj.delete()
         return redirect(reverse(self.redirect_url))
+
+
+def custom_exception_handler(exc, context):
+    # Call REST framework's default exception handler first,
+    # to get the standard error response.
+    response = exception_handler(exc, context)
+
+    # Now add the HTTP status code to the response.
+    print(response)
+    if response is not None:
+        response.data['status_code'] = response.status_code
+
+    return response

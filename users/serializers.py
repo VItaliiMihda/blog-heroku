@@ -11,12 +11,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = super(UserSerializer, self).create(validated_data)
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+        try:
+            user = super(UserSerializer, self).create(validated_data)
+            user.set_password(validated_data['password'])
+            user.save()
+            return user
+        except Exception as e:
+            error = {'message': ",".join(e.args) if len(e.args) > 0 else 'Unknown Error'}
+            raise serializers.ValidationError({'errors': error})
 
 
 class ProfileSerializer(serializers.ModelSerializer):
